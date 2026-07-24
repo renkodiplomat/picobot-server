@@ -375,7 +375,17 @@ def competition_view():
         """, (active['id'], active['id'])).fetchall()
 
         limit = active['time_limit_seconds'] or 120
+        now_utc = datetime.now(timezone.utc)
         for r in rows:
+            has_run = r['enabled_at'] is not None or r['disabled_at'] is not None
+            # hide idle robots that have gone offline
+            if not has_run:
+                try:
+                    ls = datetime.fromisoformat(r['last_seen'])
+                    if (now_utc - ls).total_seconds() > 15:
+                        continue
+                except Exception:
+                    continue
             base = {
                 'mac': r['mac'], 'ip': r['ip'],
                 'last_seen': r['last_seen'], 'command': r['command'] or 0,
