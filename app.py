@@ -818,7 +818,8 @@ COMPETITION_HTML = (
           Competition is set up. Robots are receiving
           <code>competition_ready = True</code>.
         </p>
-        <form method="post" action="{{ url_for('competition_token', comp_id=active.id) }}" class="mb-3">
+        <form method="post" action="{{ url_for('competition_token', comp_id=active.id) }}" class="mb-3"
+              onsubmit="downloadToken('token-active', {{ active.name | tojson }})">
           <div class="input-group input-group-sm">
             <span class="input-group-text">Token</span>
             <input type="text" class="form-control font-monospace" name="bearer_token" id="token-active"
@@ -856,7 +857,8 @@ COMPETITION_HTML = (
           Robots are receiving <code>competition_ready = True</code>
           and <code>competition_running = True</code>.
         </p>
-        <form method="post" action="{{ url_for('competition_token', comp_id=active.id) }}" class="mb-3">
+        <form method="post" action="{{ url_for('competition_token', comp_id=active.id) }}" class="mb-3"
+              onsubmit="downloadToken('token-active', {{ active.name | tojson }})">
           <div class="input-group input-group-sm">
             <span class="input-group-text">Token</span>
             <input type="text" class="form-control font-monospace" name="bearer_token" id="token-active"
@@ -963,6 +965,16 @@ COMPETITION_HTML = (
 
 </div>
 <script>
+  function downloadToken(inputId, compName) {
+    const val = document.getElementById(inputId).value;
+    if (!val) return;
+    const blob = new Blob([val], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = (compName || 'competition') + '-token.txt';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
   function generateToken(inputId) {
     const arr = new Uint8Array(16);
     crypto.getRandomValues(arr);
