@@ -1,0 +1,20 @@
+services:
+  server:
+    build: .
+    container_name: picobot-contest
+    restart: unless-stopped
+    volumes:
+      - db-data:/app/data
+    environment:
+      - DATABASE=/app/data/picobot.db
+      - REPORT_AUTH=${REPORT_AUTH:-}
+      - MOUNT_PATH=/picobot-contest
+    networks:
+      - traefik-net
+
+volumes:
+  db-data:
+
+networks:
+  traefik-net:
+    external: true
