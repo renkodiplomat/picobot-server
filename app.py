@@ -819,7 +819,7 @@ COMPETITION_HTML = (
           <code>competition_ready = True</code>.
         </p>
         <form method="post" action="{{ url_for('competition_token', comp_id=active.id) }}" class="mb-3"
-              onsubmit="downloadToken(event, 'token-active', {{ active.name | tojson }})">
+              data-comp-name="{{ active.name | e }}" onsubmit="downloadToken(event, 'token-active', this.dataset.compName)">
           <div class="input-group input-group-sm">
             <span class="input-group-text">Token</span>
             <input type="text" class="form-control font-monospace" name="bearer_token" id="token-active"
@@ -858,7 +858,7 @@ COMPETITION_HTML = (
           and <code>competition_running = True</code>.
         </p>
         <form method="post" action="{{ url_for('competition_token', comp_id=active.id) }}" class="mb-3"
-              onsubmit="downloadToken(event, 'token-active', {{ active.name | tojson }})">
+              data-comp-name="{{ active.name | e }}" onsubmit="downloadToken(event, 'token-active', this.dataset.compName)">
           <div class="input-group input-group-sm">
             <span class="input-group-text">Token</span>
             <input type="text" class="form-control font-monospace" name="bearer_token" id="token-active"
