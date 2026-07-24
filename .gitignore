@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Database (never commit real data)
+*.db
+*.db-shm
+*.db-wal
+
+# Secrets
+.env
+
+# Editor
+.vscode/
+.idea/
+*.swp
