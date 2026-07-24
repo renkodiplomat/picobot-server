@@ -819,7 +819,7 @@ COMPETITION_HTML = (
           <code>competition_ready = True</code>.
         </p>
         <form method="post" action="{{ url_for('competition_token', comp_id=active.id) }}" class="mb-3"
-              onsubmit="downloadToken('token-active', {{ active.name | tojson }})">
+              onsubmit="downloadToken(event, 'token-active', {{ active.name | tojson }})">
           <div class="input-group input-group-sm">
             <span class="input-group-text">Token</span>
             <input type="text" class="form-control font-monospace" name="bearer_token" id="token-active"
@@ -858,7 +858,7 @@ COMPETITION_HTML = (
           and <code>competition_running = True</code>.
         </p>
         <form method="post" action="{{ url_for('competition_token', comp_id=active.id) }}" class="mb-3"
-              onsubmit="downloadToken('token-active', {{ active.name | tojson }})">
+              onsubmit="downloadToken(event, 'token-active', {{ active.name | tojson }})">
           <div class="input-group input-group-sm">
             <span class="input-group-text">Token</span>
             <input type="text" class="form-control font-monospace" name="bearer_token" id="token-active"
@@ -965,15 +965,19 @@ COMPETITION_HTML = (
 
 </div>
 <script>
-  function downloadToken(inputId, compName) {
+  function downloadToken(event, inputId, compName) {
     const val = document.getElementById(inputId).value;
     if (!val) return;
+    event.preventDefault();
     const blob = new Blob([val], { type: 'text/plain' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = (compName || 'competition') + '-token.txt';
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
     URL.revokeObjectURL(a.href);
+    setTimeout(() => event.target.submit(), 200);
   }
   function generateToken(inputId) {
     const arr = new Uint8Array(16);
